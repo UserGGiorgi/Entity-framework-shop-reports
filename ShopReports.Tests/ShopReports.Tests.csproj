@@ -8,7 +8,9 @@
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\code-analysis.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>CA1062, CA1063, CA1805, CA1707, CA2100, CS8618</NoWarn>
+    <NoWarn>CA1062,CA1063,CA1805,CA1707,CA2100,CS8618</NoWarn>
+    <Trimming>full</Trimming>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\code-analysis.ruleset" Link="Properties\code-analysis.ruleset" />
