@@ -38,4 +38,17 @@ public class ShopContext : DbContext
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<OrderDetail> OrderDetails { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Customer>()
+        .HasKey(c => c.Id);
+
+        modelBuilder.Entity<Person>()
+            .HasKey(p => p.Id);
+
+        modelBuilder.Entity<Customer>()
+            .HasOne(c => c.Person)
+            .WithOne(p => p.Customer);
+    }
 }
