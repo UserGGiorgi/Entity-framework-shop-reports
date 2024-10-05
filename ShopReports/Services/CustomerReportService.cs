@@ -16,19 +16,23 @@ public class CustomerReportService : IDisposable
 
     public CustomerSalesRevenueReport GetCustomerSalesRevenueReport()
     {
-        var customer = this.shopContext.Customers
-            .OrderByDescending(c => c.Discount)
+        var customers = this.shopContext.Customers
             .Select(c => new CustomerSalesRevenueReportLine
             {
                 CustomerId = c.Id,
                 PersonFirstName = c.Person.FirstName,
                 PersonLastName = c.Person.LastName,
-                SalesRevenue = c.Orders.
-                SelectMany(o => o.Details)
-                .Sum(d => d.PriceWithDiscount),
+                SalesRevenue = c.Orders
+                    .SelectMany(o => o.Details)
+                    .Sum(d => d.PriceWithDiscount),
             })
             .ToList();
-        return new CustomerSalesRevenueReport(customer, DateTime.Now);
+        var orderedCustomers = customers
+            .Where(c => c.SalesRevenue > 0)
+            .OrderByDescending(c => c.SalesRevenue)
+            .ToList();
+
+        return new CustomerSalesRevenueReport(orderedCustomers, DateTime.Now);
     }
 
     public void Dispose()
@@ -44,14 +48,9 @@ public class CustomerReportService : IDisposable
             return;
         }
 
-        if (disposing)
+        if (disposing && this.shopContext != null)
         {
-            if (this.shopContext != null)
-            {
                 this.shopContext.Dispose();
-            }
         }
-
-        disposing = true;
     }
 }

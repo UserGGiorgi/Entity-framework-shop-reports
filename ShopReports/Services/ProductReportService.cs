@@ -31,7 +31,7 @@ public class ProductReportService : IDisposable
     public ProductReport GetProductReport()
     {
         var product = this.shopContext.Products
-            .OrderBy(p => p.Title)
+            .OrderByDescending(p => p.Title)
             .Select(p => new ProductReportLine
             {
                 ProductId = p.Id,
@@ -64,21 +64,6 @@ public class ProductReportService : IDisposable
 
     public ProductTitleSalesRevenueReport GetProductTitleSalesRevenueReport()
     {
-        // var title = this.shopContext.Titles
-        //    .OrderByDescending(p => p.pr)
-        //    .Select(p => new ProductCategoryReportLine
-        //    {
-
-        // ProductId = p.Id,
-        //        Name = this.shopContext.Titles.Where(t => t.Id == p.TitleId).Select(t => t.Title).FirstOrDefault() ?? "Null",
-        //        Manufacturer = this.shopContext.Manufacturers.Where(m => m.Id == p.ManufacturerId).Select(m => m.Name).FirstOrDefault() ?? "Null",
-        //        CategoryId = this.shopContext.Titles.Where(t => t.Id == p.TitleId).Select(m => m.CategoryId).FirstOrDefault(),
-        //        Category = this.shopContext.Categories.Where(c => c.Id == this.shopContext.Titles.Where(t => t.Id == p.TitleId).Select(m => m.CategoryId).FirstOrDefault()).Select(c => c.Name).FirstOrDefault() ?? "Null",
-        //        Price = p.UnitPrice,
-        //    })
-        //    .ToList();
-
-        // return new ProductTitleSalesRevenueReport(title, DateTime.Now);
         throw new NotImplementedException();
     }
 
@@ -95,14 +80,9 @@ public class ProductReportService : IDisposable
             return;
         }
 
-        if (disposing)
+        if (disposing && this.shopContext != null)
         {
-            if (this.shopContext != null)
-            {
                 this.shopContext.Dispose();
-            }
         }
-
-        disposing = true;
     }
 }
