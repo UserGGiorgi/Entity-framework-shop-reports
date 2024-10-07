@@ -64,7 +64,22 @@ public class ProductReportService : IDisposable
 
     public ProductTitleSalesRevenueReport GetProductTitleSalesRevenueReport()
     {
-        throw new NotImplementedException();
+        var product = this.shopContext.Products
+            .GroupBy(p => p.TitleId)
+            .Select(g => new ProductTitleSalesRevenueReportLine
+            {
+                ProductTitleName = this.shopContext.Titles
+                .Where(t => t.Id == g.Key)
+                .Select(t => t.Title)
+                .FirstOrDefault() ?? "Null",
+
+                SalesRevenue = g.Sum(p => p.OrderDetails.Sum(o => o.PriceWithDiscount)),
+                SalesAmount = g.Sum(p => p.OrderDetails.Sum(o => o.ProductAmount)),
+            })
+            .OrderByDescending(p => p.SalesRevenue)
+            .ToList();
+
+        return new ProductTitleSalesRevenueReport(product, DateTime.Now);
     }
 
     public void Dispose()
